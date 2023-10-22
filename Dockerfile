@@ -12,7 +12,6 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 
 # Copy the source and build the application.
 COPY src src
-COPY templates templates
 RUN touch src/main.rs
 RUN cargo build --locked --frozen --offline --target x86_64-unknown-linux-musl --release
 
