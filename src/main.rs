@@ -12,7 +12,7 @@ use k8s_openapi::{
         core::v1::{
             Capabilities, Container, EnvVar, PersistentVolumeClaim, PersistentVolumeClaimSpec,
             PersistentVolumeClaimVolumeSource, Pod, PodSpec, PodTemplateSpec, ResourceRequirements,
-            Secret, SecurityContext, Service, ServiceSpec, Volume, VolumeMount,
+            SecurityContext, Service, ServiceSpec, Volume, VolumeMount,
         },
     },
     apimachinery::pkg::{
@@ -589,7 +589,6 @@ async fn main() -> Result<()> {
     let services = Api::<Service>::all(client.clone());
     let pvcs = Api::<PersistentVolumeClaim>::all(client.clone());
     let deployments = Api::<Deployment>::all(client.clone());
-    let secrets = Api::<Secret>::all(client.clone());
 
     // limit the controller to running a maximum of two concurrent reconciliations
     let config = Config::default()
@@ -598,7 +597,6 @@ async fn main() -> Result<()> {
 
     Controller::new(services, watcher::Config::default())
         .owns(pvcs, watcher::Config::default())
-        .owns(secrets, watcher::Config::default())
         .owns(deployments, watcher::Config::default())
         .with_config(config)
         .shutdown_on_signal()
