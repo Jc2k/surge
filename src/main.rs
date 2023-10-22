@@ -256,7 +256,7 @@ async fn apply(service: Arc<Service>, ctx: Arc<Data>) -> anyhow::Result<Action> 
             ..Default::default()
         },
         spec: Some(PersistentVolumeClaimSpec {
-            storage_class_name: Some("denaby-default".to_string()),
+            storage_class_name: Some(ctx.storage_class.clone()),
             access_modes: Some(vec!["ReadWriteOnce".to_string()]),
             resources: Some(ResourceRequirements {
                 requests: Some(BTreeMap::from([(
@@ -348,7 +348,7 @@ async fn apply(service: Arc<Service>, ctx: Arc<Data>) -> anyhow::Result<Action> 
                     }]),
                     containers: vec![Container {
                         name: "tailscale".to_string(),
-                        image: Some("tailscale/tailscale:latest".to_string()),
+                        image: Some(ctx.tailscale_image.clone()),
                         env: Some(vec![
                             EnvVar {
                                 name: "TS_STATE_DIR".to_string(),
@@ -550,6 +550,7 @@ async fn main() -> Result<()> {
 
     let base_url = env::var("SURGE_CONTROL_PLANE_URL")?;
     let auth_token = format!("Bearer {}", env::var("SURGE_CONTROL_PLANE_AUTH")?);
+    let storage_class = env::var("SURGE_STORAGE_CLASS")?;
 
     let default_user = match env::var("SURGE_DEFAULT_USER") {
         Ok(username) => Some(username),
@@ -561,6 +562,12 @@ async fn main() -> Result<()> {
         Ok(username) => username,
         Err(VarError::NotPresent) => "headscale".to_string(),
         Err(VarError::NotUnicode(_)) => bail!("SURGE_LOAD_BALANCER_CLASS is set but invalid"),
+    };
+
+    let tailscale_image = match env::var("SURGE_TAILSCALE_IMAGE") {
+        Ok(tailscale_image) => tailscale_image,
+        Err(VarError::NotPresent) => "tailscale/tailscale:latest".to_string(),
+        Err(VarError::NotUnicode(_)) => bail!("SURGE_TAILSCALE_IMAGE is set but invalid"),
     };
 
     let mut headers = header::HeaderMap::new();
@@ -604,6 +611,8 @@ async fn main() -> Result<()> {
                 headscale,
                 default_user,
                 load_balancer_class,
+                storage_class,
+                tailscale_image,
             }),
         )
         .for_each(|res| async move {
