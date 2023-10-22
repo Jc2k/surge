@@ -566,7 +566,7 @@ async fn main() -> Result<()> {
 
     let tailscale_image = match env::var("SURGE_TAILSCALE_IMAGE") {
         Ok(tailscale_image) => tailscale_image,
-        Err(VarError::NotPresent) => "tailscale/tailscale:latest".to_string(),
+        Err(VarError::NotPresent) => "tailscale/tailscale:stable".to_string(),
         Err(VarError::NotUnicode(_)) => bail!("SURGE_TAILSCALE_IMAGE is set but invalid"),
     };
 
