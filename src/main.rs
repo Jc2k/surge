@@ -184,7 +184,9 @@ async fn ensure_node_registered(
 async fn apply(service: Arc<Service>, ctx: Arc<Data>) -> anyhow::Result<Action> {
     let client = &ctx.client;
 
-    if service.spec.clone().unwrap().load_balancer_class != Some("headscale".into()) {
+    let spec = service.spec.as_ref().context("Missing object key .spec")?;
+
+    if spec.load_balancer_class != Some(ctx.load_balancer_class.clone()) {
         return Ok(Action::requeue(Duration::from_secs(300)));
     }
 
@@ -203,7 +205,6 @@ async fn apply(service: Arc<Service>, ctx: Arc<Data>) -> anyhow::Result<Action> 
         .uid
         .as_ref()
         .context("Missing object key .spec")?;
-    let spec = service.spec.as_ref().context("Missing object key .spec")?;
     let cluster_ip = spec
         .cluster_ip
         .as_ref()
@@ -556,6 +557,12 @@ async fn main() -> Result<()> {
         Err(VarError::NotUnicode(_)) => bail!("SURGE_DEFAULT_USER is set but invalid"),
     };
 
+    let load_balancer_class = match env::var("SURGE_LOAD_BALANCER_CLASS") {
+        Ok(username) => username,
+        Err(VarError::NotPresent) => "headscale".to_string(),
+        Err(VarError::NotUnicode(_)) => bail!("SURGE_LOAD_BALANCER_CLASS is set but invalid"),
+    };
+
     let mut headers = header::HeaderMap::new();
     let mut auth_value = header::HeaderValue::from_str(&auth_token)?;
     auth_value.set_sensitive(true);
@@ -596,6 +603,7 @@ async fn main() -> Result<()> {
                 base_url,
                 headscale,
                 default_user,
+                load_balancer_class,
             }),
         )
         .for_each(|res| async move {
