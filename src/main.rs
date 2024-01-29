@@ -12,7 +12,7 @@ use k8s_openapi::{
         core::v1::{
             Capabilities, Container, EnvVar, PersistentVolumeClaim, PersistentVolumeClaimSpec,
             PersistentVolumeClaimVolumeSource, Pod, PodSpec, PodTemplateSpec, ResourceRequirements,
-            SecurityContext, Service, ServiceSpec, Volume, VolumeMount,
+            SecurityContext, Service, ServiceSpec, Volume, VolumeMount, VolumeResourceRequirements,
         },
     },
     apimachinery::pkg::{
@@ -258,7 +258,7 @@ async fn apply(service: Arc<Service>, ctx: Arc<Data>) -> anyhow::Result<Action> 
         spec: Some(PersistentVolumeClaimSpec {
             storage_class_name: Some(ctx.storage_class.clone()),
             access_modes: Some(vec!["ReadWriteOnce".to_string()]),
-            resources: Some(ResourceRequirements {
+            resources: Some(VolumeResourceRequirements {
                 requests: Some(BTreeMap::from([(
                     "storage".to_string(),
                     Quantity("50Mi".to_string()),
