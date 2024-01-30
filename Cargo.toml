@@ -2,6 +2,7 @@
 name = "surge"
 version = "1.0.0"
 edition = "2021"
+repository = "https://github.com/Jc2k/surge"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
