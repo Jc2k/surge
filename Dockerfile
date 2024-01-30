@@ -17,6 +17,6 @@ RUN cargo build --locked --frozen --offline --target x86_64-unknown-linux-musl -
 
 # Copy the statically-linked binary into a scratch container.
 FROM scratch
-COPY --from=build /usr/src/operator/target/x86_64-unknown-linux-musl/release/surge .
+COPY --from=build /usr/src/operator/target/x86_64-unknown-linux-musl/release/surged .
 USER 1000
-ENTRYPOINT ["./surge"]
+ENTRYPOINT ["./surged"]

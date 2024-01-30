@@ -1,5 +1,5 @@
 [package]
-name = "surge"
+name = "surged"
 version = "1.0.0"
 edition = "2021"
 repository = "https://github.com/Jc2k/surge"
