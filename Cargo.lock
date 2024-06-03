@@ -585,7 +585,7 @@ dependencies = [
  "http 0.2.11",
  "hyper 0.14.28",
  "log",
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "rustls-native-certs",
  "tokio",
  "tokio-rustls 0.24.1",
@@ -793,7 +793,7 @@ dependencies = [
  "pem",
  "pin-project",
  "rand",
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "rustls-pemfile 1.0.4",
  "secrecy",
  "serde",
@@ -1729,7 +1729,7 @@ version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c28327cf380ac148141087fbfb9de9d7bd4e84ab5d2c28fbc911d753de8a7081"
 dependencies = [
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "tokio",
 ]
 
@@ -1758,9 +1758,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-util"
-version = "0.7.10"
+version = "0.7.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5419f34732d9eb6ee4c3578b7989078579b7f039cbbb9ca2c4da015749371e15"
+checksum = "9cf6b47b3771c49ac75ad09a6162f53ad4b8088b76ac60e8ec1455b31a189fe1"
 dependencies = [
  "bytes",
  "futures-core",
@@ -1768,7 +1768,6 @@ dependencies = [
  "pin-project-lite",
  "slab",
  "tokio",
- "tracing",
 ]
 
 [[package]]
