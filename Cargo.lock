@@ -585,7 +585,7 @@ dependencies = [
  "http 0.2.11",
  "hyper 0.14.28",
  "log",
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "rustls-native-certs",
  "tokio",
  "tokio-rustls 0.24.1",
@@ -758,12 +758,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "k8s-openapi"
+version = "0.22.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "19501afb943ae5806548bc3ebd7f3374153ca057a38f480ef30adfde5ef09755"
+dependencies = [
+ "base64 0.22.0",
+ "chrono",
+ "serde",
+ "serde-value",
+ "serde_json",
+]
+
+[[package]]
 name = "kube"
 version = "0.88.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "462fe330a0617b276ec864c2255810adcdf519ecb6844253c54074b2086a97bc"
 dependencies = [
- "k8s-openapi",
+ "k8s-openapi 0.21.1",
  "kube-client",
  "kube-core",
  "kube-derive",
@@ -788,12 +801,12 @@ dependencies = [
  "hyper-rustls 0.24.2",
  "hyper-timeout",
  "jsonpath-rust",
- "k8s-openapi",
+ "k8s-openapi 0.21.1",
  "kube-core",
  "pem",
  "pin-project",
  "rand",
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "rustls-pemfile 1.0.4",
  "secrecy",
  "serde",
@@ -818,7 +831,7 @@ dependencies = [
  "form_urlencoded",
  "http 0.2.11",
  "json-patch",
- "k8s-openapi",
+ "k8s-openapi 0.21.1",
  "once_cell",
  "schemars",
  "serde",
@@ -852,7 +865,7 @@ dependencies = [
  "futures",
  "hashbrown",
  "json-patch",
- "k8s-openapi",
+ "k8s-openapi 0.21.1",
  "kube-client",
  "parking_lot",
  "pin-project",
@@ -1597,7 +1610,7 @@ version = "1.0.1"
 dependencies = [
  "anyhow",
  "futures",
- "k8s-openapi",
+ "k8s-openapi 0.22.0",
  "kube",
  "reqwest",
  "serde",
@@ -1729,7 +1742,7 @@ version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c28327cf380ac148141087fbfb9de9d7bd4e84ab5d2c28fbc911d753de8a7081"
 dependencies = [
- "rustls 0.21.10",
+ "rustls 0.21.11",
  "tokio",
 ]
 
