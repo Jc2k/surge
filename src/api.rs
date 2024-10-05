@@ -25,31 +25,31 @@ pub(crate) struct Node {
 
 #[derive(Deserialize)]
 pub(crate) struct RegisterResponse {
-    pub machine: Node,
+    pub node: Node,
 }
 
 #[derive(Deserialize)]
-pub(crate) struct ListMachineResponse {
-    pub machines: Vec<Node>,
+pub(crate) struct ListNodeResponse {
+    pub nodes: Vec<Node>,
 }
 
 pub(crate) async fn get_node_by_nodekey(ctx: &Data, nodekey: &str) -> anyhow::Result<Option<Node>> {
     let resp = ctx
         .headscale
-        .get(format!("{}/api/v1/machine", ctx.base_url))
+        .get(format!("{}/api/v1/node", ctx.base_url))
         .send()
         .await
-        .context("Failed to list machines")?
+        .context("Failed to list nodes")?
         .error_for_status()?;
 
     let outcome = resp
-        .json::<ListMachineResponse>()
+        .json::<ListNodeResponse>()
         .await
-        .context("Failed to list machines")?;
+        .context("Failed to list nodes")?;
 
-    for machine in outcome.machines {
-        if machine.node_key == nodekey {
-            return Ok(Some(machine));
+    for node in outcome.nodes {
+        if node.node_key == nodekey {
+            return Ok(Some(node));
         }
     }
 
@@ -59,11 +59,11 @@ pub(crate) async fn get_node_by_nodekey(ctx: &Data, nodekey: &str) -> anyhow::Re
 pub(crate) async fn register_node(ctx: &Data, nodekey: &str, user: &str) -> anyhow::Result<Node> {
     let resp = ctx
         .headscale
-        .post(format!("{}/api/v1/machine/register", ctx.base_url))
+        .post(format!("{}/api/v1/node/register", ctx.base_url))
         .query(&[("user", user), ("key", &format!("nodekey:{}", nodekey))])
         .send()
         .await
-        .context("Failed to register machine")?;
+        .context("Failed to register node")?;
 
     let resp = resp.error_for_status()?;
 
@@ -72,19 +72,19 @@ pub(crate) async fn register_node(ctx: &Data, nodekey: &str, user: &str) -> anyh
         .await
         .context("Failed to parse response")?;
 
-    Ok(outcome.machine)
+    Ok(outcome.node)
 }
 
 pub(crate) async fn rename(ctx: &Data, id: &str, name: &str) -> anyhow::Result<Node> {
     let resp = ctx
         .headscale
         .post(format!(
-            "{}/api/v1/machine/{}/rename/{name}",
+            "{}/api/v1/node/{}/rename/{name}",
             ctx.base_url, id
         ))
         .send()
         .await
-        .context("Failed to rename machine")?
+        .context("Failed to rename node")?
         .error_for_status()?;
 
     let outcome = resp
@@ -92,13 +92,13 @@ pub(crate) async fn rename(ctx: &Data, id: &str, name: &str) -> anyhow::Result<N
         .await
         .context("Failed to parse response")?;
 
-    Ok(outcome.machine)
+    Ok(outcome.node)
 }
 
 pub(crate) async fn change_user(ctx: &Data, id: &str, user: &str) -> anyhow::Result<Node> {
     let resp = ctx
         .headscale
-        .post(format!("{}/api/v1/machine/{}/user", ctx.base_url, id))
+        .post(format!("{}/api/v1/node/{}/user", ctx.base_url, id))
         .query(&[("user", user)])
         .send()
         .await
@@ -110,12 +110,12 @@ pub(crate) async fn change_user(ctx: &Data, id: &str, user: &str) -> anyhow::Res
         .await
         .context("Failed to parse response")?;
 
-    Ok(outcome.machine)
+    Ok(outcome.node)
 }
 
 pub(crate) async fn remove_node(ctx: &Data, id: &str) -> anyhow::Result<()> {
     ctx.headscale
-        .delete(format!("{}/api/v1/machine/{}", ctx.base_url, id))
+        .delete(format!("{}/api/v1/node/{}", ctx.base_url, id))
         .send()
         .await
         .context("Failed to delete node")?
