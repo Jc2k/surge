@@ -139,7 +139,7 @@ async fn ensure_node_registered(
 ) -> anyhow::Result<api::Node> {
     if let Some(annotations) = &service.meta().annotations {
         if let Some(nodekey) = annotations.get("surge.unrouted.uk/nodekey") {
-            return match api::get_node_by_nodekey(&ctx, nodekey).await? {
+            return match api::get_node_by_nodekey(ctx, nodekey).await? {
                 Some(machine) => Ok(machine),
                 None => bail!("Could not find node '{}' in control plane, but thats what tunnel is annotated as", nodekey)
             };
@@ -149,7 +149,7 @@ async fn ensure_node_registered(
     let namespace = service.meta().namespace.as_ref().unwrap();
     let name = service.meta().name.as_ref().unwrap();
 
-    let payload = get_pod_metadata(ctx.client.clone(), &namespace, &name).await?;
+    let payload = get_pod_metadata(ctx.client.clone(), namespace, name).await?;
 
     return Ok(match payload.backend_state.as_str() {
         "NeedsLogin" => {
@@ -165,14 +165,14 @@ async fn ensure_node_registered(
 
             // We check this nodekey isn't already registed
             // This is just belts and braces to prevent calling register multiple times for the same nodekey
-            match api::get_node_by_nodekey(&ctx, nodekey).await? {
+            match api::get_node_by_nodekey(ctx, nodekey).await? {
                 Some(machine) => machine,
-                None => api::register_node(&ctx, nodekey, &user).await?,
+                None => api::register_node(ctx, nodekey, user).await?,
             }
         }
         "Running" => {
             let nodekey = &payload.this_node.node_key.split_once(':').unwrap().1;
-            match api::get_node_by_nodekey(&ctx, nodekey).await? {
+            match api::get_node_by_nodekey(ctx, nodekey).await? {
                         Some(machine) => machine,
                         None => bail!("Could not find node '{}' in control plane, but node is in 'Running' state. Bailing for now", nodekey)
                     }
