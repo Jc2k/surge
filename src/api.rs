@@ -78,10 +78,7 @@ pub(crate) async fn register_node(ctx: &Data, nodekey: &str, user: &str) -> anyh
 pub(crate) async fn rename(ctx: &Data, id: &str, name: &str) -> anyhow::Result<Node> {
     let resp = ctx
         .headscale
-        .post(format!(
-            "{}/api/v1/node/{}/rename/{name}",
-            ctx.base_url, id
-        ))
+        .post(format!("{}/api/v1/node/{}/rename/{name}", ctx.base_url, id))
         .send()
         .await
         .context("Failed to rename node")?
