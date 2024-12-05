@@ -60,7 +60,7 @@ pub(crate) async fn register_node(ctx: &Data, nodekey: &str, user: &str) -> anyh
     let resp = ctx
         .headscale
         .post(format!("{}/api/v1/node/register", ctx.base_url))
-        .query(&[("user", user), ("key", &format!("nodekey:{}", nodekey))])
+        .query(&[("user", user), ("key", &format!("mkey:{}", nodekey))])
         .send()
         .await
         .context("Failed to register node")?;
