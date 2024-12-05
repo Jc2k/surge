@@ -2,7 +2,7 @@
 name = "surged"
 description = "Kubernetes operator for exposing services via headless"
 license = "Apache-2.0"
-version = "1.0.3"
+version = "1.0.5"
 edition = "2021"
 repository = "https://github.com/Jc2k/surge"
 
