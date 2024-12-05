@@ -171,7 +171,7 @@ async fn ensure_node_registered(
             }
         }
         "Running" => {
-            let nodekey = &payload.this_node.node_key.split_once(':').unwrap().1;
+            let nodekey = &payload.this_node.node_key;
             match api::get_node_by_nodekey(ctx, nodekey).await? {
                         Some(machine) => machine,
                         None => bail!("Could not find node '{}' in control plane, but node is in 'Running' state. Bailing for now", nodekey)
