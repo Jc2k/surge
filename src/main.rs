@@ -399,6 +399,12 @@ async fn apply(service: Arc<Service>, ctx: Arc<Data>) -> anyhow::Result<Action> 
                             }),
                             ..Default::default()
                         }),
+                        resources: Some(ResourceRequirements {
+                            limits: Some(BTreeMap::from([
+                                ("squat.ai/tun".into(), Quantity("1".into()))
+                            ])),
+                            ..Default::default()
+                        }),
                         ..Default::default()
                     }],
                     ..Default::default()
