@@ -16,7 +16,7 @@ serde_json = "1.0.133"
 tokio = { version = "1.42.0", features=["full"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3.18"
-thiserror = "1.0.64"
+thiserror = "2.0.4"
 anyhow = "1.0.94"
 serde = { version = "1.0.215", features = ["derive"] }
 tokio-util = "0.7.13"
